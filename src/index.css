@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and old Edge */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+html, body {
+  overflow-x: hidden;
+}
