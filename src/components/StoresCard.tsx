@@ -34,7 +34,7 @@ export default function StoresSection() {
           scroll-smooth
           md:grid-flow-row
           md:grid-rows-none
-          md:grid-cols-3
+          md:grid-cols-6
         "
       >
         {stores.map((store, index) => (
@@ -48,7 +48,7 @@ export default function StoresSection() {
               if (e.key === "Enter" || e.key === " ") navigate("/category/2");
             }}
           >
-            <h3 className="font-semibold text-sm">{store.title}</h3>
+            <h3 className="font-semibold text-sm text-center">{store.title}</h3>
 
             <div className="flex justify-center">
               <img

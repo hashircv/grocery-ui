@@ -18,7 +18,7 @@ export default function ProductSection({ section }: Props) {
             <img
               src={section.image}
               alt={section.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-md"
               onError={(e) => {
                 e.currentTarget.style.display = "none";
               }}

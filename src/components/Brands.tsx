@@ -31,13 +31,13 @@ export default function Brands() {
           scroll-smooth
           md:grid-flow-row
           md:grid-rows-none
-          md:grid-cols-3
+          md:grid-cols-6
         "
       >
         {brands.map((store, index) => (
           <div
             key={index}
-            className={`${store.bg} h-40 lg:h-60 rounded-2xl p-6 flex flex-col justify-between cursor-pointer`}
+            className={`${store.bg} h-32  rounded-2xl p-4 flex flex-col justify-between cursor-pointer`}
             role="button"
             tabIndex={0}
             onClick={() => navigate("/category/2")}
@@ -45,7 +45,7 @@ export default function Brands() {
               if (e.key === "Enter" || e.key === " ") navigate("/category/2");
             }}
           >
-            <h3 className="font-semibold text-sm">{store.title}</h3>
+            <h3 className="font-semibold text-sm text-center">{store.title}</h3>
 
             <div className="flex justify-center">
               <img
