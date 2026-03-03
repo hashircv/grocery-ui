@@ -36,7 +36,7 @@ export default function ProductDetail() {
             <img
               src={product.image || "/images/placeholder.png"}
               alt={product.name}
-              className="w-full h-[500px] object-cover"
+              className="w-full h-[400px] object-cover"
             />
           </div>
         </div>
@@ -71,9 +71,9 @@ export default function ProductDetail() {
               </div>
             )}
 
-            <button className="mt-5 px-10 py-3 border border-red-400 text-red-500 font-bold rounded-xl hover:bg-red-50 transition">
+            {/* <button className="mt-5 px-10 py-3 border border-red-400 text-red-500 font-bold rounded-xl hover:bg-red-50 transition">
               ADD +
-            </button>
+            </button> */}
           </div>
 
           {/* Category Info */}

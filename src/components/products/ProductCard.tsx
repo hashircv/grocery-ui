@@ -59,7 +59,7 @@ export default function ProductCard({ product, categoryId }: Props) {
         </div>
 
         {/* Add / Counter */}
-        <div
+        {/* <div
           className="mt-3"
           onClick={(e) => e.stopPropagation()}
         >
@@ -87,7 +87,7 @@ export default function ProductCard({ product, categoryId }: Props) {
               </button>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

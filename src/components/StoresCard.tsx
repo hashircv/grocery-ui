@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 export default function StoresSection() {
+  const navigate = useNavigate();
   const stores = [
     { title: "Bakery store", bg: "bg-blue-200", img: "/images/bottle.jpg" },
     { title: "Packaging store", bg: "bg-orange-200", img: "/images/bottle.jpg" },
@@ -38,14 +41,20 @@ export default function StoresSection() {
           <div
             key={index}
             className={`${store.bg} h-32 rounded-2xl p-4 flex flex-col justify-between`}
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/category/2")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") navigate("/category/2");
+            }}
           >
             <h3 className="font-semibold text-sm">{store.title}</h3>
 
-            <div className="flex justify-end">
+            <div className="flex justify-center">
               <img
                 src={store.img}
                 alt={store.title}
-                className="h-16 object-contain"
+                className="h-16 object-contain rounded-md"
               />
             </div>
           </div>

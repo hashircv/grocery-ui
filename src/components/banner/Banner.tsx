@@ -102,19 +102,11 @@ export default function BannerSlider() {
     setTimeout(() => setIsDragging(false), 0);
   };
 
-  const getOffset = (idx: number) => {
-    let diff = idx - current;
-    if (diff > total / 2) diff -= total;
-    if (diff < -total / 2) diff += total;
-    return diff;
-  };
-
   return (
     <div className="w-[80%] max-w-6xl mx-auto mt-10 select-none">
       {/* Slide Track */}
       <div
-        className="relative w-full overflow-hidden"
-        style={{ height: 260 }}
+        className="relative w-full overflow-hidden h-44 sm:h-52 md:h-[260px]"
         onMouseDown={onPointerDown}
         onMouseMove={onPointerMove}
         onMouseUp={onPointerUp}
@@ -123,51 +115,27 @@ export default function BannerSlider() {
         onTouchMove={onPointerMove}
         onTouchEnd={onPointerUp}
       >
-        {banners.map((banner, idx) => {
-          const offset = getOffset(idx);
-          const isActive = offset === 0;
-          const isVisible = Math.abs(offset) <= 1;
-
-          return (
-            <div
-              key={idx}
-              onClick={() => {
-                if (!isDragging && !isActive) {
-                  setCurrent(idx);
-                  resetAutoplay();
-                }
-              }}
-              className="absolute top-0 h-full transition-all duration-500 ease-in-out"
-              style={{
-                left: "50%",
-                width: "85%",
-                transform: `translateX(calc(-50% + ${offset * 95}%)) scale(${isActive ? 1 : 0.96})`,
-                opacity: isVisible ? (isActive ? 1 : 0.65) : 0,
-                zIndex: isActive ? 10 : 5,
-                cursor: isActive ? "grab" : "pointer",
-                pointerEvents: isVisible ? "auto" : "none",
-              }}
-            >
-              <div className={`${banner.bg} rounded-3xl shadow-lg flex items-center justify-between w-full h-full px-8`}>
-                {/* Text */}
-                <div className="max-w-[55%]">
-                  <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
-                    {banner.title}
-                  </h2>
-                  <p className="text-base text-gray-700 mt-2">{banner.subtitle}</p>
-                </div>
-
-                {/* Image */}
-                <img
-                  src={banner.image}
-                  alt={banner.title}
-                  draggable={false}
-                  className="w-24 lg:w-32 h-16 lg:h-20 object-contain"
-                />
-              </div>
+        <div className="absolute top-0 left-0 w-full h-full transition-opacity duration-500 ease-in-out">
+          <div
+            className={`${banners[current].bg} rounded-3xl shadow-lg flex items-center justify-between w-full h-full px-8`}
+          >
+            {/* Text */}
+            <div className="max-w-[55%]">
+              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
+                {banners[current].title}
+              </h2>
+              <p className="text-base text-gray-700 mt-2">{banners[current].subtitle}</p>
             </div>
-          );
-        })}
+
+            {/* Image */}
+            <img
+              src={banners[current].image}
+              alt={banners[current].title}
+              draggable={false}
+              className="w-24 lg:w-32 h-16 lg:h-20 object-contain"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Dots */}
