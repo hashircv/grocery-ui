@@ -43,7 +43,7 @@ export default function BannerSlider() {
     if (autoplayRef.current !== null) {
       window.clearInterval(autoplayRef.current);
     }
-    autoplayRef.current = window.setInterval(next, 4000);
+    autoplayRef.current = window.setInterval(next, 3000);
   }, [next]);
 
   useEffect(() => {
@@ -55,10 +55,14 @@ export default function BannerSlider() {
     };
   }, [resetAutoplay]);
 
+  const isTouchEvent = (
+    e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
+  ): e is TouchEvent<HTMLDivElement> => "touches" in e;
+
   const getClientX = (
     e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
   ) => {
-    if ("touches" in e) return e.touches[0]?.clientX;
+    if (isTouchEvent(e)) return e.touches[0]?.clientX;
     return e.clientX;
   };
 
@@ -66,7 +70,7 @@ export default function BannerSlider() {
     e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
   ) => {
     if ("changedTouches" in e) return e.changedTouches[0]?.clientX;
-    if ("touches" in e) return e.touches[0]?.clientX;
+    if (isTouchEvent(e)) return e.touches[0]?.clientX;
     return e.clientX;
   };
 
@@ -98,7 +102,7 @@ export default function BannerSlider() {
     setTimeout(() => setIsDragging(false), 0);
   };
 
-  const getOffset = (idx) => {
+  const getOffset = (idx: number) => {
     let diff = idx - current;
     if (diff > total / 2) diff -= total;
     if (diff < -total / 2) diff += total;
@@ -106,7 +110,7 @@ export default function BannerSlider() {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-10 select-none">
+    <div className="w-[80%] max-w-6xl mx-auto mt-10 select-none">
       {/* Slide Track */}
       <div
         className="relative w-full overflow-hidden"

@@ -24,6 +24,7 @@ export default function ProductDetail() {
       </div>
     );
   }
+  const bulk = product.bulk ?? [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -60,9 +61,9 @@ export default function ProductDetail() {
             </p>
 
             {/* Bulk Pricing */}
-            {product.bulk?.length > 0 && (
+            {bulk.length > 0 && (
               <div className="mt-3 space-y-1">
-                {product.bulk.map((item, index) => (
+                {bulk.map((item, index) => (
                   <p key={index} className="text-gray-500 text-sm">
                     {item}
                   </p>

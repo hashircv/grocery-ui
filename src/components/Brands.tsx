@@ -1,11 +1,11 @@
 export default function Brands() {
   const brands = [
-    { title: "Bakery store", bg: "bg-blue-200", img: "/stores/bakery.png" },
-    { title: "Packaging store", bg: "bg-orange-200", img: "/stores/packaging.png" },
-    { title: "Biryani store", bg: "bg-yellow-200", img: "/stores/biryani.png" },
-    { title: "Events & party store", bg: "bg-purple-200", img: "/stores/events.png" },
-    { title: "Sushi store", bg: "bg-orange-300", img: "/stores/sushi.png" },
-    { title: "Burger store", bg: "bg-amber-200", img: "/stores/burger.png" },
+    { title: "Bakery store", bg: "bg-blue-200", img: "/images/bottle.jpg" },
+    { title: "Packaging store", bg: "bg-orange-200", img: "/images/bottle.jpg" },
+    { title: "Biryani store", bg: "bg-yellow-200", img: "/images/bottle.jpg" },
+    { title: "Events & party store", bg: "bg-purple-200", img: "/images/bottle.jpg" },
+    { title: "Sushi store", bg: "bg-orange-300", img: "/images/bottle.jpg" },
+    { title: "Burger store", bg: "bg-amber-200", img: "/images/bottle.jpg" },
   ];
 
   return (
