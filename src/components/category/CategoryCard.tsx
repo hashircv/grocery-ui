@@ -1,4 +1,9 @@
-export default function CategoryCard({ title, image }) {
+type Props = {
+  title: string;
+  image: string;
+};
+
+export default function CategoryCard({ title, image }: Props) {
   return (
     <div className="bg-gray-200 rounded-2xl p-3 text-center hover:scale-105 transition">
       <img

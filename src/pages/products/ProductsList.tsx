@@ -1,10 +1,21 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { sections } from "../../components/products/data/products";
 import ProductCard from "../../components/products/ProductCard";
+import { sections } from "../../components/products/data/products";
 
 // ── per-category subcategories & filters ──────────────────────────────────────
-const categoryMeta = {
+type Subcategory = {
+  id: string;
+  label: string;
+  image: string;
+};
+
+type CategoryMeta = {
+  subcategories: Subcategory[];
+  filters: string[];
+};
+
+const categoryMeta: Record<number, CategoryMeta> = {
   1: {
     subcategories: [
       { id: "all", label: "All", image: "" },
@@ -28,19 +39,19 @@ const categoryMeta = {
 };
 
 export default function ProductList() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const section = sections.find((s) => s.id === Number(id));
   const meta = categoryMeta[Number(id)];
 
-  const [activeSub, setActiveSub] = useState("all");
-  const [activeFilters, setActiveFilters] = useState([]);
+  const [activeSub, setActiveSub] = useState<string>("all");
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
   if (!section) return <p className="p-4">Category not found.</p>;
 
   const subcategories = meta?.subcategories ?? [{ id: "all", label: "All", image: "" }];
   const filters = meta?.filters ?? [];
 
-  const toggleFilter = (f) =>
+  const toggleFilter = (f: string) =>
     setActiveFilters((prev) =>
       prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]
     );

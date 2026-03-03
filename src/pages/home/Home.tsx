@@ -1,4 +1,3 @@
-import React from 'react'
 import Banner from "../../components/banner/Banner";
 import CategoryGrid from "../../components/category/CategoryGrid";
 import StoresSection from "../../components/StoresCard";

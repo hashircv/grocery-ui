@@ -2,7 +2,10 @@ import { useParams } from "react-router-dom";
 import { sections } from "../../components/products/data/products";
 
 export default function ProductDetail() {
-  const { categoryId, productId } = useParams();
+  const { categoryId, productId } = useParams<{
+    categoryId: string;
+    productId: string;
+  }>();
 
   // Find category
   const category = sections.find(
@@ -78,7 +81,7 @@ export default function ProductDetail() {
               Product details
             </h2>
             <p className="text-gray-600 leading-relaxed">
-              This product belongs to <b>{category.title}</b> category.
+              This product belongs to <b>{category?.title ?? "this"}</b> category.
               Premium quality item curated for your menu.
             </p>
           </div>

@@ -1,6 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import type { MouseEvent, TouchEvent } from "react";
 
-const banners = [
+type BannerItem = {
+  title: string;
+  subtitle: string;
+  image: string;
+  bg: string;
+};
+
+const banners: BannerItem[] = [
   {
     title: "Pack, store & prep",
     subtitle: "Durable kitchen containers",
@@ -24,35 +32,64 @@ const banners = [
 export default function BannerSlider() {
   const [current, setCurrent] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const dragStartX = useRef(null);
-  const autoplayRef = useRef(null);
+  const dragStartX = useRef<number | null>(null);
+  const autoplayRef = useRef<number | null>(null);
   const total = banners.length;
 
   const next = useCallback(() => setCurrent((c) => (c + 1) % total), [total]);
   const prev = useCallback(() => setCurrent((c) => (c - 1 + total) % total), [total]);
 
   const resetAutoplay = useCallback(() => {
-    clearInterval(autoplayRef.current);
-    autoplayRef.current = setInterval(next, 4000);
+    if (autoplayRef.current !== null) {
+      window.clearInterval(autoplayRef.current);
+    }
+    autoplayRef.current = window.setInterval(next, 4000);
   }, [next]);
 
   useEffect(() => {
     resetAutoplay();
-    return () => clearInterval(autoplayRef.current);
+    return () => {
+      if (autoplayRef.current !== null) {
+        window.clearInterval(autoplayRef.current);
+      }
+    };
   }, [resetAutoplay]);
 
-  const onPointerDown = (e) => {
-    dragStartX.current = e.clientX ?? e.touches?.[0]?.clientX;
+  const getClientX = (
+    e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
+  ) => {
+    if ("touches" in e) return e.touches[0]?.clientX;
+    return e.clientX;
+  };
+
+  const getEndClientX = (
+    e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
+  ) => {
+    if ("changedTouches" in e) return e.changedTouches[0]?.clientX;
+    if ("touches" in e) return e.touches[0]?.clientX;
+    return e.clientX;
+  };
+
+  const onPointerDown = (
+    e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
+  ) => {
+    dragStartX.current = getClientX(e) ?? null;
     setIsDragging(false);
   };
-  const onPointerMove = (e) => {
+
+  const onPointerMove = (
+    e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
+  ) => {
     if (dragStartX.current === null) return;
-    const dx = (e.clientX ?? e.touches?.[0]?.clientX ?? dragStartX.current) - dragStartX.current;
+    const dx = (getClientX(e) ?? dragStartX.current) - dragStartX.current;
     if (Math.abs(dx) > 5) setIsDragging(true);
   };
-  const onPointerUp = (e) => {
+
+  const onPointerUp = (
+    e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
+  ) => {
     if (dragStartX.current === null) return;
-    const dx = (e.clientX ?? e.changedTouches?.[0]?.clientX ?? dragStartX.current) - dragStartX.current;
+    const dx = (getEndClientX(e) ?? dragStartX.current) - dragStartX.current;
     if (Math.abs(dx) > 40) {
       dx < 0 ? next() : prev();
       resetAutoplay();

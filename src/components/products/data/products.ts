@@ -1,5 +1,22 @@
 
-export const sections = [
+export type Product = {
+  id: number
+  name: string
+  qty: string
+  price: number
+  bulk?: string[]
+  image: string
+}
+
+export type ProductSection = {
+  id: number
+  title: string
+  subtitle: string
+  image: string
+  products: Product[]
+}
+
+export const sections: ProductSection[] = [
   {
     id: 1,
     title: "Your Menu Add-ons",

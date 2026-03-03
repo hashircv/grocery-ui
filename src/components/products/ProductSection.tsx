@@ -1,7 +1,12 @@
-import ProductCard from "./ProductCard";
 import { useNavigate } from "react-router-dom";
+import ProductCard from "./ProductCard";
+import type { ProductSection as ProductSectionType } from "./data/products";
 
-export default function ProductSection({ section }) {
+type Props = {
+  section: ProductSectionType;
+};
+
+export default function ProductSection({ section }: Props) {
   const navigate = useNavigate();
 
   return (
@@ -14,7 +19,9 @@ export default function ProductSection({ section }) {
               src={section.image}
               alt={section.title}
               className="w-full h-full object-cover"
-              onError={(e) => (e.target.style.display = "none")}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
             />
           </div>
 

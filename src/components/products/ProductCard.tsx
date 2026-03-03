@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Product } from "./data/products";
 
-export default function ProductCard({ product, categoryId }) {
+type Props = {
+  product: Product;
+  categoryId?: number | string;
+};
+
+export default function ProductCard({ product, categoryId }: Props) {
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
 
@@ -21,7 +27,9 @@ export default function ProductCard({ product, categoryId }) {
           src={product.image}
           alt={product.name}
           className="w-full h-full object-contain"
-          onError={(e) => (e.target.style.display = "none")}
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
         />
       </div>
 
