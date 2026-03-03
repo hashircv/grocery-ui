@@ -119,7 +119,7 @@ export default function ProductList() {
         <div className="flex-1 overflow-y-auto p-3">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
             {section.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product}  categoryId={id}/>
             ))}
           </div>
         </div>

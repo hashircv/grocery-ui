@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/home/Home";
 import ProductList from "./pages/products/ProductsList";
+import ProductDetail from "./pages/products/ProductDetail";
 
 
 function App() {
@@ -11,9 +12,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/category/:id" element={<ProductList />} />
+        <Route path="/category/:categoryId/product/:productId" element={<ProductDetail />} />
       </Routes>
     </div>
   );
 }
 
-export default App;  // ← this was missing
+export default App;

@@ -1,7 +1,9 @@
 import ProductCard from "./ProductCard";
 import { useNavigate } from "react-router-dom";
+
 export default function ProductSection({ section }) {
   const navigate = useNavigate();
+
   return (
     <div className="w-full px-4 py-4">
       {/* Header */}
@@ -12,11 +14,10 @@ export default function ProductSection({ section }) {
               src={section.image}
               alt={section.title}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.style.display = "none";
-              }}
+              onError={(e) => (e.target.style.display = "none")}
             />
           </div>
+
           <div>
             <h2 className="text-lg font-bold text-gray-900 leading-tight">
               {section.title}
@@ -24,18 +25,23 @@ export default function ProductSection({ section }) {
             <p className="text-sm text-gray-500">{section.subtitle}</p>
           </div>
         </div>
-       <button
-      onClick={() => navigate(`/category/${section.id}`)}
-      className="text-red-500 font-bold text-sm shrink-0"
-    >
-      See all
-    </button>
+
+        <button
+          onClick={() => navigate(`/category/${section.id}`)}
+          className="text-red-500 font-bold text-sm shrink-0"
+        >
+          See all
+        </button>
       </div>
 
-      {/* Horizontally scrollable cards */}
+      {/* Horizontal scroll */}
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
         {section.products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            categoryId={section.id}
+          />
         ))}
       </div>
     </div>
