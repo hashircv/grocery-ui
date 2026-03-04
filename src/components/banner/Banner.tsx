@@ -1,42 +1,59 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { MouseEvent, TouchEvent } from "react";
+import { getHomeBanners } from "../../services/bannerApi";
 
 type BannerItem = {
   image: string;
   alt: string;
 };
 
-const banners: BannerItem[] = [
-  {
-    image: "images/banner_01.jpg",
-    alt: "Banner 1",
-  },
-  {
-    image: "images/banner_01.jpg",
-    alt: "Banner 2",
-  },
-  {
-    image: "images/banner_01.jpg",
-    alt: "Banner 3",
-  },
-];
+const fallbackBanners: BannerItem[] = [];
 
 export default function BannerSlider() {
+  const [banners, setBanners] = useState<BannerItem[]>(fallbackBanners);
   const [current, setCurrent] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartX = useRef<number | null>(null);
   const autoplayRef = useRef<number | null>(null);
   const total = banners.length;
 
-  const next = useCallback(() => setCurrent((c) => (c + 1) % total), [total]);
-  const prev = useCallback(() => setCurrent((c) => (c - 1 + total) % total), [total]);
+  const next = useCallback(() => {
+    if (total === 0) return;
+    setCurrent((c) => (c + 1) % total);
+  }, [total]);
+  const prev = useCallback(() => {
+    if (total === 0) return;
+    setCurrent((c) => (c - 1 + total) % total);
+  }, [total]);
 
   const resetAutoplay = useCallback(() => {
     if (autoplayRef.current !== null) {
       window.clearInterval(autoplayRef.current);
     }
-    autoplayRef.current = window.setInterval(next, 3000);
+    if (total > 1) {
+      autoplayRef.current = window.setInterval(next, 3000);
+    }
   }, [next]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadBanners = async () => {
+      try {
+        const items = await getHomeBanners();
+        if (!cancelled) {
+          setBanners(items);
+          setCurrent(0);
+        }
+      } catch {
+        if (!cancelled) setBanners(fallbackBanners);
+      }
+    };
+
+    loadBanners();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     resetAutoplay();
@@ -93,6 +110,8 @@ export default function BannerSlider() {
     dragStartX.current = null;
     setTimeout(() => setIsDragging(false), 0);
   };
+
+  if (banners.length === 0) return null;
 
   return (
     <div className="w-[80%] max-w-6xl mx-auto mt-10 select-none">

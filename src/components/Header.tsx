@@ -4,12 +4,12 @@ export default function Header() {
   return (
     <div className="bg-white p-4 shadow-sm sticky top-0 z-50">
       <div className="flex items-center gap-3">
-        <div className="flex items-center bg-gray-100 rounded-full px-4 py-2 w-[40%]">
-          <Search size={18} className="text-gray-400 mr-2" />
+        <div className="flex items-center bg-white rounded-full px-4 py-2 w-full md:w-[40%] border border-red-200 shadow-sm focus-within:ring-2 focus-within:ring-red-200 focus-within:border-red-300">
+          <Search size={18} className="text-red-500 mr-2" />
           <input
             type="text"
             placeholder="Search 'Green Peas'"
-            className="bg-transparent outline-none w-full text-sm"
+            className="bg-transparent outline-none w-full text-sm placeholder:text-gray-400"
           />
         </div>
 
