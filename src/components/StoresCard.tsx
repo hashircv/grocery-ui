@@ -54,6 +54,8 @@ export default function StoresSection() {
               <img
                 src={store.img}
                 alt={store.title}
+                loading="lazy"
+                decoding="async"
                 className="h-16 object-contain rounded-md"
               />
             </div>

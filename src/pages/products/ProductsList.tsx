@@ -216,7 +216,13 @@ export default function ProductList() {
               }`}
             >
               {sub.image ? (
-                <img src={sub.image} alt={sub.label} className="w-full h-full object-cover" />
+                <img
+                  src={sub.image}
+                  alt={sub.label}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <span className="text-xl">
                   {sub.id === "all" ? "🔲" :

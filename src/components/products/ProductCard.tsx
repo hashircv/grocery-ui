@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Product } from "./data/products";
+import type { Product } from "./types";
 
 type Props = {
   product: Product;
@@ -26,6 +26,8 @@ export default function ProductCard({ product, categoryId }: Props) {
         <img
           src={product.image}
           alt={product.name}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-contain"
           onError={(e) => {
             e.currentTarget.style.display = "none";

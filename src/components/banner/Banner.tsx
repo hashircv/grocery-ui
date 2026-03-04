@@ -112,6 +112,8 @@ export default function BannerSlider() {
             src={banners[current].image}
             alt={banners[current].alt}
             draggable={false}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover rounded-3xl shadow-lg"
           />
         </div>

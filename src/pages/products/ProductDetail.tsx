@@ -36,6 +36,8 @@ export default function ProductDetail() {
             <img
               src={product.image || "/images/placeholder.png"}
               alt={product.name}
+              loading="lazy"
+              decoding="async"
               className="w-full h-[400px] object-cover"
             />
           </div>

@@ -18,6 +18,8 @@ export default function ProductSection({ section }: Props) {
             <img
               src={section.image}
               alt={section.title}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover rounded-md"
               onError={(e) => {
                 e.currentTarget.style.display = "none";

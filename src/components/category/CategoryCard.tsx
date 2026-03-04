@@ -18,6 +18,8 @@ export default function CategoryCard({ title, image, onClick }: Props) {
       <img
         src={image}
         alt={title}
+        loading="lazy"
+        decoding="async"
         className="w-full h-20 object-contain"
       />
       <p className="mt-2 text-sm font-medium">{title}</p>
