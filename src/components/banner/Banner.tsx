@@ -2,30 +2,22 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import type { MouseEvent, TouchEvent } from "react";
 
 type BannerItem = {
-  title: string;
-  subtitle: string;
   image: string;
-  bg: string;
+  alt: string;
 };
 
 const banners: BannerItem[] = [
   {
-    title: "Pack, store & prep",
-    subtitle: "Durable kitchen containers",
-    image: "/container.png",
-    bg: "bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400",
+    image: "images/banner_01.jpg",
+    alt: "Banner 1",
   },
   {
-    title: "Fresh & Organic",
-    subtitle: "Farm fresh vegetables",
-    image: "/veggies.png",
-    bg: "bg-gradient-to-br from-green-200 via-green-300 to-green-400",
+    image: "images/banner_01.jpg",
+    alt: "Banner 2",
   },
   {
-    title: "Daily Essentials",
-    subtitle: "Milk & grocery items",
-    image: "/groceries.png",
-    bg: "bg-gradient-to-br from-sky-200 via-sky-300 to-sky-400",
+    image: "images/banner_01.jpg",
+    alt: "Banner 3",
   },
 ];
 
@@ -116,25 +108,12 @@ export default function BannerSlider() {
         onTouchEnd={onPointerUp}
       >
         <div className="absolute top-0 left-0 w-full h-full transition-opacity duration-500 ease-in-out">
-          <div
-            className={`${banners[current].bg} rounded-3xl shadow-lg flex items-center justify-between w-full h-full px-8`}
-          >
-            {/* Text */}
-            <div className="max-w-[55%]">
-              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
-                {banners[current].title}
-              </h2>
-              <p className="text-base text-gray-700 mt-2">{banners[current].subtitle}</p>
-            </div>
-
-            {/* Image */}
-            <img
-              src={banners[current].image}
-              alt={banners[current].title}
-              draggable={false}
-              className="w-24 lg:w-32 h-16 lg:h-20 object-contain"
-            />
-          </div>
+          <img
+            src={banners[current].image}
+            alt={banners[current].alt}
+            draggable={false}
+            className="w-full h-full object-cover rounded-3xl shadow-lg"
+          />
         </div>
       </div>
 

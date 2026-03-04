@@ -1,31 +1,54 @@
 import { useNavigate } from "react-router-dom";
 import CategoryCard from "./CategoryCard";
 
-const categories = [
-  { title: "Your Menu Add-ons", image: "/images/categories/menu.png" },
-  { title: "Fruits & Vegetables", image: "/images/categories/fruits.png" },
-  { title: "Packaging Material", image: "/images/categories/packaging.png" },
-  { title: "Dairy", image: "/images/categories/dairy.png" },
-  { title: "Edible Oils", image: "/images/categories/oils.png" },
-  { title: "Masala, Salt & Sugar", image: "/images/categories/masala.png" },
-  { title: "Custom Packaging", image: "/images/categories/custom.png" },
-  { title: "Chicken & Eggs", image: "/images/categories/chicken.png" },
-  { title: "Frozen & Instant Food", image: "/images/categories/frozen.png" },
-  { title: "Sauces & Seasoning", image: "/images/categories/sauces.png" },
-  { title: "Canned & Imported Items", image: "/images/categories/canned.png" },
-  { title: "Bakery & Chocolates", image: "/images/categories/bakery.png" },
-  { title: "Cleaning & Consumables", image: "/images/categories/cleaning.png" },
-  { title: "Pulses", image: "/images/categories/pulses.png" },
-  { title: "Flours", image: "/images/categories/flours.png" },
-  { title: "Beverages & Mixers", image: "/images/categories/beverages.png" },
-  { title: "Mutton,Duck & Lamb", image: "/images/categories/meats.png" },
-  { title: "Rice & Rice Products", image: "/images/categories/rice-products.png" },
-  { title: "Fish,Prawns & Seafood", image: "/images/categories/seafood.png" },
-  { title: "Fresh Cut & Peeled", image: "/images/categories/fresh-cut.png" },
-  { title: "GT Chicken & Eggs", image: "/images/categories/chicken.png" },
-  { title: "Kitchenware", image: "/images/categories/kitchenware.png" },
-  { title: "Kitchen Appliances", image: "/images/categories/appliances.png" },
+const apiCategories = [
+  {
+    id: "6",
+    name: "Groceries",
+    image:
+      "https:/vpmadmin.itdeck.online/img/live/img/17d3da9f-bf47-41ca-9629-8ee2d54a92ac.jpg",
+  },
+  {
+    id: "5",
+    name: "Ingredients",
+    image:
+      "https:/vpmadmin.itdeck.online/img/live/img/d339da39-35c6-4cf6-8fbb-5a558054e241.jpg",
+  },
+  {
+    id: "4",
+    name: "Beverages",
+    image:
+      "https:/vpmadmin.itdeck.online/img/live/img/90b20c5a-5403-45d0-991a-87ebf6682b52.webp",
+  },
+  {
+    id: "3",
+    name: "Disposable Packaging",
+    image:
+      "https:/vpmadmin.itdeck.online/img/live/img/3d463e6c-6565-409b-83a6-69a422c7b0af.jpg",
+  },
+  {
+    id: "2",
+    name: "Fruit crush",
+    image:
+      "https:/vpmadmin.itdeck.online/img/live/img/2f987438-629f-4829-bacf-f29d1453fae1.webp",
+  },
+  {
+    id: "1",
+    name: "Masala Salt&Sugar",
+    image:
+      "https:/vpmadmin.itdeck.online/img/live/img/b3a479d2-3e31-4c47-87a3-ce8497d60fdd.jpg",
+  },
 ];
+
+const normalizeImageUrl = (url: string) => {
+  if (url.startsWith("https:/") && !url.startsWith("https://")) {
+    return url.replace("https:/", "https://");
+  }
+  if (url.startsWith("http:/") && !url.startsWith("http://")) {
+    return url.replace("http:/", "http://");
+  }
+  return url;
+};
 
 export default function CategoryGrid() {
   const navigate = useNavigate();
@@ -34,11 +57,12 @@ export default function CategoryGrid() {
       <h1 className="text-2xl font-bold mb-4">Shop by category</h1>
 
       <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
-        {categories.map((cat, index) => (
+        {apiCategories.map((cat) => (
           <CategoryCard
-            key={index}
-            {...cat}
-            onClick={() => navigate("/category/2")}
+            key={cat.id}
+            title={cat.name}
+            image={normalizeImageUrl(cat.image)}
+            onClick={() => navigate(`/category/${cat.id}`)}
           />
         ))}
       </div>

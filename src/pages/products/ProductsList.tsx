@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductCard from "../../components/products/ProductCard";
 import { sections } from "../../components/products/data/products";
@@ -11,31 +11,39 @@ type Subcategory = {
 };
 
 type CategoryMeta = {
-  subcategories: Subcategory[];
   filters: string[];
 };
 
 const categoryMeta: Record<number, CategoryMeta> = {
   1: {
-    subcategories: [
-      { id: "all", label: "All", image: "" },
-      { id: "brownies", label: "Brownies & Cakes", image: "" },
-      { id: "chocolates", label: "Chocolates", image: "" },
-      { id: "cookies", label: "Cookies", image: "" },
-      { id: "pastries", label: "Pastries", image: "" },
-    ],
     filters: ["Rated 4.0+", "Veg", "Non Veg", "Brand", "Eggless", "Frozen"],
   },
   2: {
-    subcategories: [
-      { id: "all", label: "All", image: "" },
-      { id: "butter", label: "Butter & Ghee", image: "" },
-      { id: "milk", label: "Milk & Cream", image: "" },
-      { id: "cheese", label: "Cheese", image: "" },
-      { id: "yogurt", label: "Curd & Yogurt", image: "" },
-    ],
     filters: ["Rated 4.0+", "Veg", "Brand", "Amul", "Mother Dairy", "Type"],
   },
+};
+
+type SubcategoryApiItem = {
+  id: string;
+  name: string;
+  image?: string;
+};
+
+type SubcategoryApiResponse = {
+  success: boolean;
+  data?: {
+    items?: SubcategoryApiItem[];
+  };
+};
+
+const normalizeImageUrl = (url: string) => {
+  if (url.startsWith("https:/") && !url.startsWith("https://")) {
+    return url.replace("https:/", "https://");
+  }
+  if (url.startsWith("http:/") && !url.startsWith("http://")) {
+    return url.replace("http:/", "http://");
+  }
+  return url;
 };
 
 export default function ProductList() {
@@ -45,10 +53,13 @@ export default function ProductList() {
 
   const [activeSub, setActiveSub] = useState<string>("all");
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([
+    { id: "all", label: "All", image: "" },
+  ]);
+  const [subcategoriesLoading, setSubcategoriesLoading] = useState<boolean>(false);
 
   if (!section) return <p className="p-4">Category not found.</p>;
 
-  const subcategories = meta?.subcategories ?? [{ id: "all", label: "All", image: "" }];
   const filters = meta?.filters ?? [];
 
   const toggleFilter = (f: string) =>
@@ -56,10 +67,51 @@ export default function ProductList() {
       prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]
     );
 
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    const loadSubcategories = async () => {
+      setSubcategoriesLoading(true);
+      setSubcategories([{ id: "all", label: "All", image: "" }]);
+      setActiveSub("all");
+      try {
+        const response = await fetch(
+          `https://vpmadmin.itdeck.online/user/sub_category/list?category_id=${id}`
+        );
+        const payload = (await response.json()) as SubcategoryApiResponse;
+        if (!cancelled && payload.success) {
+          const items = payload.data?.items ?? [];
+          const mapped = items.map((item) => ({
+            id: item.id,
+            label: item.name,
+            image: item.image ? normalizeImageUrl(item.image) : "",
+          }));
+          setSubcategories([{ id: "all", label: "All", image: "" }, ...mapped]);
+          setActiveSub("all");
+        }
+      } catch {
+        if (!cancelled) {
+          setSubcategories([{ id: "all", label: "All", image: "" }]);
+          setActiveSub("all");
+        }
+      } finally {
+        if (!cancelled) setSubcategoriesLoading(false);
+      }
+    };
+
+    loadSubcategories();
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
   return (
     <div className="flex w-full bg-white p-3" style={{ height: "calc(100vh - 64px)" }}>
       {/* ── Left Sidebar ── */}
       <aside className="w-30 lg:w-60 shrink-0 bg-gray-50 border-r border-gray-100 flex flex-col py-2 overflow-y-auto p-6 rounded-xl bg-white shadow-grey">
+        {subcategoriesLoading && (
+          <div className="px-2 py-3 text-xs text-gray-400">Loading...</div>
+        )}
         {subcategories.map((sub) => (
           <button
             key={sub.id}
