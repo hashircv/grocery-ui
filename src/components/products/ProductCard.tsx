@@ -12,8 +12,7 @@ export default function ProductCard({ product, categoryId }: Props) {
   const navigate = useNavigate();
 
   const goToDetail = () => {
-    if (!categoryId) return; // safety
-    navigate(`/category/${categoryId}/product/${product.id}`);
+    navigate(`/product/${product.id}`);
   };
 
   return (

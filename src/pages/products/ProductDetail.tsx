@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 
 export default function ProductDetail() {
-  const { categoryId, productId } = useParams<{
-    categoryId: string;
+  const { productId } = useParams<{
     productId: string;
   }>();
 
@@ -16,7 +15,6 @@ export default function ProductDetail() {
           Product data is not loaded from the API yet.
         </p>
         <div className="mt-6 text-sm text-gray-600">
-          <div>Category ID: {categoryId ?? "-"}</div>
           <div>Product ID: {productId ?? "-"}</div>
         </div>
       </div>
