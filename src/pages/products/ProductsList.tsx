@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductCard from "../../components/products/ProductCard";
-import { sections } from "../../components/products/data/products";
+import type { Product } from "../../components/products/data/products";
 
 // ── per-category subcategories & filters ──────────────────────────────────────
 type Subcategory = {
@@ -36,6 +36,29 @@ type SubcategoryApiResponse = {
   };
 };
 
+type ProductVariantApiItem = {
+  id: string;
+  price?: string;
+  offerPrice?: string;
+  quantity?: number;
+  uom?: string;
+  image?: string;
+};
+
+type ProductApiItem = {
+  id: string;
+  product_name: string;
+  image?: string;
+  variants?: ProductVariantApiItem[];
+};
+
+type ProductApiResponse = {
+  success: boolean;
+  data?: {
+    items?: ProductApiItem[];
+  };
+};
+
 const normalizeImageUrl = (url: string) => {
   if (url.startsWith("https:/") && !url.startsWith("https://")) {
     return url.replace("https:/", "https://");
@@ -48,7 +71,6 @@ const normalizeImageUrl = (url: string) => {
 
 export default function ProductList() {
   const { id } = useParams<{ id: string }>();
-  const section = sections.find((s) => s.id === Number(id));
   const meta = categoryMeta[Number(id)];
 
   const [activeSub, setActiveSub] = useState<string>("all");
@@ -57,8 +79,8 @@ export default function ProductList() {
     { id: "all", label: "All", image: "" },
   ]);
   const [subcategoriesLoading, setSubcategoriesLoading] = useState<boolean>(false);
-
-  if (!section) return <p className="p-4">Category not found.</p>;
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState<boolean>(false);
 
   const filters = meta?.filters ?? [];
 
@@ -66,6 +88,66 @@ export default function ProductList() {
     setActiveFilters((prev) =>
       prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]
     );
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    const loadProducts = async () => {
+      setProductsLoading(true);
+      try {
+        const categoryId = activeSub === "all" ? id : "";
+        const subCategoryId = activeSub === "all" ? "" : activeSub;
+        const url = `https://vpmadmin.itdeck.online/user/products/list/1?search=&categoryId=${categoryId}&subCategoryId=${subCategoryId}&brandId=null&storeId=null`;
+        const response = await fetch(url);
+        const payload = (await response.json()) as ProductApiResponse;
+        if (!cancelled && payload.success) {
+          const items = payload.data?.items ?? [];
+          const mapped: Product[] = [];
+          items.forEach((item) => {
+            const variants = item.variants ?? [];
+            if (variants.length === 0) {
+              mapped.push({
+                id: item.id,
+                name: item.product_name,
+                qty: "",
+                price: 0,
+                image: item.image ? normalizeImageUrl(item.image) : "",
+              });
+              return;
+            }
+
+            variants.forEach((variant) => {
+              const priceRaw = variant.offerPrice ?? variant.price ?? "0";
+              const price = Number(priceRaw);
+              const qty =
+                variant.quantity && variant.uom
+                  ? `${variant.quantity} ${variant.uom}`
+                  : "";
+              mapped.push({
+                id: `${item.id}-${variant.id}`,
+                name: item.product_name,
+                qty,
+                price: Number.isNaN(price) ? 0 : price,
+                image: normalizeImageUrl(
+                  variant.image || item.image || ""
+                ),
+              });
+            });
+          });
+          setProducts(mapped);
+        }
+      } catch {
+        if (!cancelled) setProducts([]);
+      } finally {
+        if (!cancelled) setProductsLoading(false);
+      }
+    };
+
+    loadProducts();
+    return () => {
+      cancelled = true;
+    };
+  }, [id, activeSub]);
 
   useEffect(() => {
     if (!id) return;
@@ -180,11 +262,17 @@ export default function ProductList() {
 
         {/* Product grid — only this section scrolls */}
         <div className="flex-1 overflow-y-auto p-3">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-            {section.products.map((product) => (
-              <ProductCard key={product.id} product={product}  categoryId={id}/>
-            ))}
-          </div>
+          {productsLoading ? (
+            <p className="text-sm text-gray-500">Loading products...</p>
+          ) : products.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} categoryId={id} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">No products found.</p>
+          )}
         </div>
       </div>
     </div>
